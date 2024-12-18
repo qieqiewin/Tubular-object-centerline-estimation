@@ -15,6 +15,8 @@ The goal of this project is to estimate the centerline of a tubular object (such
 4. **Apply the rotation to the point cloud**: Transform the entire point cloud by applying the calculated rotation matrix.
 5. **Visualize the original and transformed point cloud**: Use Open3D to display both the original and the transformed (aligned) object.
 
+![Tubular Object Point Cloud](images/point_cloud.png)
+
 ### Part 2: Centerline and Boundary Extraction
 1. **Identify boundary points**: Detect the boundary points along the main axis of the tubular object, particularly the start and end points.
 2. **Generate a centerline**: Connect the start and end points of the tubular object and create 100 evenly spaced sample points along this line, representing the centerline.
@@ -26,9 +28,11 @@ The goal of this project is to estimate the centerline of a tubular object (such
    - Perform a 2D circle fit in the plane to obtain the center `c_i` and the radius `r_i`.
 5. **Construct the centerline**: Traverse all sampled points along the centerline, extract the circle centers, and form the continuous centerline.
 
+![Tubular Object Point Cloud with Centerline](images/centerline_point_cloud.png)
+
 ## Dependencies
 
-- Python 3.8+
+- Python 3.6
 - [NumPy](https://numpy.org/)
 - [SciPy](https://scipy.org/)
 - [Open3D](http://www.open3d.org/) for point cloud visualization and manipulation
@@ -38,56 +42,3 @@ Install dependencies using:
 \`\`\`bash
 pip install numpy scipy open3d matplotlib
 \`\`\`
-
-## Code Example
-
-### 1. Aligning the Tubular Object's Axis to the z-Axis
-
-\`\`\`python
-import numpy as np
-import open3d as o3d
-
-# Load point cloud
-pcd = o3d.io.read_point_cloud("your_point_cloud.ply")
-points = np.asarray(pcd.points)
-
-# Estimate main axis direction using PCA and compute the rotation matrix to align it with z-axis
-main_axis, rotation_matrix = estimate_main_axis_to_z(points)
-
-# Apply the rotation to the point cloud
-rotated_points = apply_rotation_matrix(points, rotation_matrix)
-
-# Visualize original and rotated point clouds
-visualize_point_clouds(points, rotated_points)
-\`\`\`
-
-### 2. Centerline Extraction and Circle Fitting
-
-\`\`\`python
-# Extract start and end points from the tubular model
-start_point, end_point = extract_boundary_points(rotated_points)
-
-# Generate the centerline with 100 sample points
-centerline_points = generate_centerline(start_point, end_point, num_samples=100)
-
-# Fit circles along the centerline and extract the circle centers
-centerline, radii = fit_circles_along_centerline(centerline_points, rotated_points)
-
-# Visualize the final centerline and the original point cloud
-visualize_centerline(rotated_points, centerline)
-\`\`\`
-
-## Visualization
-- The aligned point cloud and the centerline estimation can be visualized using Open3D.
-- The radii at each point along the centerline can be plotted using Matplotlib.
-
-## Usage
-
-1. Load your 3D point cloud model (e.g., a cylindrical structure).
-2. Run the centerline estimation script to obtain the centerline and radius values.
-3. Visualize the results in 3D and inspect the radius variation along the centerline.
-
-## Future Work
-
-- Extend the method to handle more complex tubular structures with branching and varying diameters.
-- Improve robustness against noise and missing data in the point cloud.
