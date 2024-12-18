@@ -1,10 +1,10 @@
 # Tubular Object Centerline Estimation
 
-This repository provides a method for estimating the centerline of a tubular object by aligning the main axis to the z-axis, identifying boundary points, and fitting circles along the centerline to determine the center points and radii at each step.
+This repository provides a method for estimating the centerline of a tubular object.
 
 ## Overview
 
-The goal of this project is to estimate the centerline of a tubular object (such as a pipe or a cylindrical structure) using 3D point cloud data. This process involves transforming the object’s main axis to align with the z-axis, then sampling along the centerline to fit circles at each step.
+The goal of this project is to estimate the centerline of a tubular object (such as a pipe or a cylindrical structure) using 3D point cloud data. This process involves transforming the object’s main axis to align with the z-axis, then sampling along the main_axis to fit circles at each step.
 
 ### Key Steps
 
@@ -19,9 +19,9 @@ The goal of this project is to estimate the centerline of a tubular object (such
 
 ### Part 2: Centerline and Boundary Extraction
 1. **Identify boundary points**: Detect the boundary points along the main axis of the tubular object, particularly the start and end points.
-2. **Generate a centerline**: Connect the start and end points of the tubular object and create 100 evenly spaced sample points along this line, representing the centerline.
-3. **Plane projection and point selection**:
-   - For each point `p_i` on the centerline, define a projection plane `P_i` that is perpendicular to the main axis.
+2. **Generate points in main_axis**: Connect the start and end points of the tubular object and create 100 evenly spaced sample points along this axis.
+3. **Plane projection and circle point selection**:
+   - For each point `p_i` on the axis, define a projection plane `P_i` that is perpendicular to the main axis.
    - Select the set of points `C_i` from the point cloud that are within a threshold distance `thresh` from the projection plane.
 4. **Fit a circle in each projection plane**:
    - Project the selected points `C_i` onto the projection plane.
@@ -37,8 +37,3 @@ The goal of this project is to estimate the centerline of a tubular object (such
 - [SciPy](https://scipy.org/)
 - [Open3D](http://www.open3d.org/) for point cloud visualization and manipulation
 - [Matplotlib](https://matplotlib.org/) for visualizing results
-
-Install dependencies using:
-\`\`\`bash
-pip install numpy scipy open3d matplotlib
-\`\`\`
